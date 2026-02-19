@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TimeTrack Pro | Professional Services Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          /* Global UI Variables - Controlled by System Admin Setup */
+          --brand-primary: #4f46e5;
+          --app-radius: 16px;
+          --app-padding: 1.5rem;
+          --app-font-scale: 1rem;
+
+          /* Sidebar Defaults */
+          --sidebar-bg: #0f172a;
+          --sidebar-text: #94a3b8;
+          --sidebar-active-bg: #4f46e5;
+
+          /* Top Bar Defaults */
+          --topbar-bg: #ffffff;
+          --topbar-border: #e2e8f0;
+          --topbar-text: #0f172a;
+        }
+
+        html, body, #root {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          font-size: var(--app-font-scale);
+        }
+        
+        body { 
+          font-family: 'Inter', sans-serif; 
+          letter-spacing: -0.01em;
+          transition: background-color 0.3s ease;
+        }
+
+        /* Radius Utility Application */
+        .rounded-2xl { border-radius: var(--app-radius) !important; }
+        .rounded-3xl { border-radius: calc(var(--app-radius) * 1.5) !important; }
+        .rounded-\[2rem\] { border-radius: calc(var(--app-radius) * 2) !important; }
+        .rounded-\[1\.25rem\] { border-radius: calc(var(--app-radius) * 1.25) !important; }
+        .rounded-\[1\.5rem\] { border-radius: calc(var(--app-radius) * 1.5) !important; }
+        .rounded-\[2\.5rem\] { border-radius: calc(var(--app-radius) * 2.5) !important; }
+
+        /* Dynamic Primary Color Utilities */
+        .text-brand { color: var(--brand-primary) !important; }
+        .bg-brand { background-color: var(--brand-primary) !important; }
+        .border-brand { border-color: var(--brand-primary) !important; }
+        .ring-brand { --tw-ring-color: var(--brand-primary) !important; }
+        .shadow-brand { --tw-shadow-color: var(--brand-primary) !important; }
+
+        /* Smooth transitions for theme changes */
+        * {
+          transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+          transition-duration: 200ms;
+        }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+        
+        .compact-input {
+          font-size: 0.8125rem;
+          line-height: 1rem;
+          padding: 0.5rem 0.75rem;
+        }
+
+        /* Glassmorphism Logic */
+        .glass-enabled .glass-panel {
+          background: rgba(255, 255, 255, 0.7) !important;
+          backdrop-filter: blur(8px) !important;
+          border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        }
+        
+        .glass-panel {
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+        }
+
+        @media print {
+          aside, header, .no-print, button, .tab-switcher { 
+            display: none !important; 
+          }
+          main { 
+            margin: 0 !important; 
+            padding: 0 !important; 
+            overflow: visible !important; 
+            height: auto !important; 
+            background: white !important;
+          }
+          #root, body, html { 
+            height: auto !important; 
+            overflow: visible !important; 
+            background: white !important;
+          }
+          .max-w-7xl { 
+            max-width: none !important; 
+            padding-bottom: 0 !important;
+          }
+          .bg-slate-900 {
+            background-color: #0f172a !important;
+            color: white !important;
+            -webkit-print-color-adjust: exact;
+          }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.37.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-[#F8FAFC] text-slate-900 antialiased">
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
