@@ -111,6 +111,23 @@ const generateWeeksForYear = (year: number): TimesheetPeriod[] => {
 
 const App: React.FC = () => {
   const [loggedInUser, setLoggedInUser] = useState<Employee | null>(null);
+
+  // attempt to hydrate user from previous session (stored in localStorage)
+  useEffect(() => {
+    const stored = localStorage.getItem('user');
+    if (stored) {
+      try {
+        const u: Employee = JSON.parse(stored);
+        if (u.role) {
+          u.role = u.role.charAt(0).toUpperCase() + u.role.slice(1).toLowerCase();
+        }
+        setLoggedInUser(u);
+      } catch (err) {
+        console.error('Failed to parse stored user', err);
+        localStorage.removeItem('user');
+      }
+    }
+  }, []);
   const [activeView, setActiveView] = useState<'dashboard' | 'planner' | 'timesheets' | 'approvals' | 'clients' | 'resources' | 'ledger' | 'users' | 'invoices' | 'reports'>('dashboard');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -255,27 +272,34 @@ const App: React.FC = () => {
     setTimeout(() => setIsSyncing(false), 1200);
   };
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    const userMap: Record<string, string> = {
-      'hamza.mehmood': 'E1',
-      'muhammad.salman': 'E2',
-      'rahat.kaleem': 'E3' 
-    };
 
-    const empId = userMap[username.toLowerCase()];
-    if (empId && password === '1234') {
-      const user = employees.find(e => e.id === empId);
-      if (user) {
-        setLoggedInUser(user);
-        setLoginError('');
-      } else {
-        setLoginError('User profile not found in system.');
-      }
-    } else {
-      setLoginError('Invalid credentials. Please use provided PRD logins.');
+  // Authentication Handler with Backend Integration
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoginError('');
+
+  try {
+    const response = await fetch('http://localhost:5000/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: username, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      setLoginError(data.message || 'Login failed');
+      return;
     }
-  };
+
+    // Success → store user (localStorage / context / zustand / redux)
+    localStorage.setItem('user', JSON.stringify(data.user));
+    setLoggedInUser(data.user);
+  } catch (err) {
+    setLoginError('Network error. Is backend running?');
+    console.error(err);
+  }
+};
 
   const handleLogout = () => {
     setLoggedInUser(null);
@@ -512,7 +536,12 @@ const App: React.FC = () => {
     { id: 'users', label: 'System Admin', icon: ShieldAlert, role: 'Admin' },
   ];
 
-  const filteredMenuItems = menuItems.filter(item => item.role === 'All' || item.role === loggedInUser?.role);
+  // Filter items by role case-insensitively (backend may return lowercase roles)
+  const filteredMenuItems = menuItems.filter(item => {
+    if (item.role === 'All') return true;
+    if (!loggedInUser?.role) return false;
+    return item.role.toLowerCase() === loggedInUser.role.toLowerCase();
+  });
 
   if (!loggedInUser) {
     return (
